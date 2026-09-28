@@ -12,15 +12,15 @@ This repository contains the code used for both intrinsic multilingual evaluatio
 MELD/
 +-- README.md
 +-- meld_evaluation/
-¦   +-- README.md
-¦   +-- config.yaml
-¦   +-- extract_hidden_states.py
-¦   +-- extract_non_parallel_hidden_states.py
-¦   +-- calculate_intrinsic_scores.py
-¦   +-- data/
-¦       +-- flores/
-¦       +-- ntrex/
-¦       +-- glue/
+Â¦   +-- README.md
+Â¦   +-- config.yaml
+Â¦   +-- extract_hidden_states.py
+Â¦   +-- extract_non_parallel_hidden_states.py
+Â¦   +-- calculate_intrinsic_scores.py
+Â¦   +-- data/
+Â¦       +-- flores/
+Â¦       +-- ntrex/
+Â¦       +-- glue/
 +-- benchmark_evaluation/
     +-- README.md
     +-- run_benchmark.sh
@@ -51,17 +51,17 @@ The repository supports the following workflow:
 
 ```text
 Multilingual corpus
-      ¦
+      Â¦
       ?
 Hidden-state extraction
-      ¦
+      Â¦
       +-- MELD: mean pooling
       +-- MEXA: weighted mean pooling
       +-- LR:   last-token representation
-      ¦
+      Â¦
       ?
 Layer-wise intrinsic scoring
-      ¦
+      Â¦
       ?
 Comparison with downstream multilingual performance
 ```
