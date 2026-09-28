@@ -45,10 +45,10 @@ Examples:
 bash run_benchmark.sh belebele Qwen/Qwen3.5-4B 0
 
 # A local model directory
-bash run_benchmark.sh m_mmlu /data/mohman/cache/Qwen/Qwen3.5-4B 0
+bash run_benchmark.sh m_mmlu Qwen/Qwen3.5-4B 0
 
 # An instruction-tuned model
-bash run_benchmark.sh belebele /data/mohman/cache/mistralai/Ministral-3-8B-Instruct-2512-BF16 5
+bash run_benchmark.sh belebele mistralai/Ministral-3-8B-Instruct-2512-BF16 5
 ```
 
 The experiments described in the paper used **zero-shot for pretrained models** and **five-shot for instruction-tuned and reasoning models**. Pass the corresponding value explicitly for each run. The paper evaluates m-MMLU, m-ARC, and m-HellaSwag from Okapi, OpenAI MMMLU, and BELEBELE; task identifiers in the original runner include `m_mmlu`, `arc_multilingual`, `hellaswag_multilingual`, `mmmlu`, and `belebele`. Confirm the names with your installed harness before a long run.
