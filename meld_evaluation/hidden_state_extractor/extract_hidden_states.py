@@ -74,7 +74,7 @@ def main():
 
     seed = int(config["seed"])
     cache_dir = config["paths"]["cache_dir"]
-    output_dir = config["paths"].get("output_dir", ".")
+    output_dir = config["paths"]["hidden_states_dir"]
     tokenizer_configs = config["tokenizer"]
 
     corpus_cfg = config["corpora"][args.corpus]
@@ -239,7 +239,7 @@ def main():
     os.makedirs(output_dir, exist_ok=True)
 
     model_name = os.path.basename(args.model.rstrip("/"))
-    output_name = f"{model_name}_{pooling}_{args.corpus}.pt"
+    output_name = f"{model_name}_new_langs_{pooling}_{args.corpus}.pt"
     output_path = os.path.join(output_dir, output_name)
 
     torch.save(lang_lyr_hs, output_path)
