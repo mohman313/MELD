@@ -56,19 +56,19 @@ The repository supports the following workflow:
 
 ```text
 Multilingual corpus
-      ¦
-      ?
+        │
+        ▼
 Hidden-state extraction
-      ¦
-      +-- MELD: mean pooling
-      +-- MEXA: weighted mean pooling
-      +-- LR:   last-token representation
-      ¦
-      ?
+        │
+        ├── MELD: mean pooling
+        ├── MEXA: weighted mean pooling
+        └── LR: last-token representation
+        │
+        ▼
 Layer-wise intrinsic scoring
-      ¦
-      ?
-Comparison with downstream multilingual performance
+        │
+        ▼
+Correlation analysis with downstream multilingual benchmarks
 ```
 
 The same extraction and scoring interface is used for all three intrinsic methods.
