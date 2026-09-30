@@ -15,7 +15,7 @@ A CUDA-enabled PyTorch installation is required. The language model itself must 
 
 ## Configuration
 
-Before running the pipeline, edit `config.yaml` to point to the local datasets and output directories.
+Before running the pipeline, review config.yaml. By default, it loads the corpora from the data/ folder. Update the dataset paths and output directory if needed.
 
 ```yaml
 runtime:
