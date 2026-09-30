@@ -1,0 +1,239 @@
+# Shared configuration for hidden-state extraction, intrinsic scoring,
+# and correlation analysis.
+#
+# Per-run extraction/scoring choices are passed on the command line:
+#   --model, --method, --corpus
+
+seed: 313
+
+runtime:
+  # Physical GPU exposed to each extraction/scoring script.
+  gpu_id: 0
+
+  # Large hidden-state tensors listed here are loaded into CPU memory first;
+  # individual language/layer slices are then moved to the selected GPU.
+  load_hidden_states_on_cpu_models:
+    - Llama-3.1-70B
+
+paths:
+  # Optional Hugging Face cache directory. Set to null to use the library default.
+  cache_dir: null
+
+  # Directory used by extract_hidden_states.py.
+  hidden_states_dir: ./outputs/hidden_states
+
+  # Directory used by calculate_intrinsic_scores.py.
+  scores_dir: ./outputs/scores
+
+# Method-specific extraction and scoring settings.
+# Do not change these mappings when reproducing the reported experiments.
+methods:
+  meld:
+    pooling: mean_pool
+    scoring: i_score
+  mexa:
+    pooling: mexa_pool
+    scoring: mexa_score
+  lr:
+    pooling: last_token
+    scoring: lr_score
+
+tokenizer:
+  add_special_tokens: true
+  padding: max_length
+  max_length: 128
+  truncation: true
+  return_tensors: pt
+
+# Non-parallel reference corpus used for the robustness experiment.
+# The input Feather file must contain a text column and a subgroup column.
+non_parallel_corpus:
+  name: glue
+  main_dir: ./data/glue
+  subset_file: glue_sst2_qqp_mrpc_qnli_mnli_test_rsample.feather
+  text_column: text
+  group_column: group
+
+# Fixed settings used by calculate_intrinsic_scores.py.
+scoring:
+  base_language: eng
+
+  # Supported values: none, diagonal, full.
+  variance_mode: diagonal
+
+  eps: 1.0e-12
+  unbiased: true
+  normalize_dim: true
+  per_language_weighting: true
+  robust: false
+
+  # Optional non-parallel reference experiment.
+  # When enabled with subgroup: 5, the scorer expects a file named:
+  # <model>_baseline_<pooling>_glue_5.pt
+  non_parallel:
+    enabled: false
+    subgroup: 5
+
+  # Optional PCA ablations used with the MELD scoring routine.
+  # mode: none | variance | components
+  pca:
+    mode: none
+    explained_variance: 0.9
+    n_components: 256
+
+# General analysis configuration.
+#
+# analyze_correlations.py produces model-level observations only. It does not
+# macro-average models, average corpora, compute subgroup mean/std, or format
+# paper tables.
+analysis:
+  # Directory containing lm-evaluation-harness JSON result files.
+  # The analysis script searches this directory recursively.
+  benchmark_results_dir: ../benchmark_evaluation/lm-evaluation-harness/eval_results
+
+  output_dir: ./outputs/analysis
+
+  methods:
+    - meld
+    - mexa
+    - lr
+
+  corpora:
+    - flores
+    - ntrex
+
+  benchmarks:
+    - m_mmlu
+    - arc_multilingual
+    - hellaswag_multilingual
+    - mmmlu
+    - belebele
+
+  models:
+    - Qwen3.5-27B
+    - gemma-4-31B
+    - Qwen3.5-9B
+    - gemma-4-12B
+    - Llama-3.1-70B
+    - Llama-3.1-8B
+    - gemma-3-27b-pt
+    - gemma-3-12b-pt
+    - Qwen3.5-4B
+    - Ministral-3-8B-Instruct-2512-BF16
+    - Ministral-3-3B-Instruct-2512-BF16
+    - Phi-4-reasoning
+    - Phi-4-mini-reasoning
+    - Phi-4-mini-instruct
+
+  # The layer-wise score tables include the embedding/input state at row 0.
+  # We remove that row before layer aggregation.
+  drop_first_layer: true
+
+  # MELD: normalized AUC over the centered 10% layer window.
+  meld_middle_fraction: 0.10
+  meld_min_layers: 2
+
+  # Language Ranker: every fifth layer, starting from layer index 5.
+  lr_layer_step: 5
+
+  # Independent reference subsets used by the non-parallel experiment.
+  non_parallel_subgroups:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+
+corpora:
+  flores:
+    main_dir: ./data/flores
+    subset_file: flores_plus_devtest_subset.feather
+    languages:
+      - afr
+      - arb
+      - ben
+      - cat
+      - ces
+      - cmn
+      - dan
+      - deu
+      - eng
+      - eus
+      - fra
+      - guj
+      - hin
+      - hrv
+      - hun
+      - hye
+      - ind
+      - ita
+      - jpn
+      - kan
+      - kor
+      - mal
+      - mar
+      - nld
+      - npi
+      - por
+      - ron
+      - rus
+      - slk
+      - spa
+      - srp
+      - swe
+      - swh
+      - tam
+      - tel
+      - tha
+      - ukr
+      - urd
+      - vie
+      - wol
+      - yor
+      - zul
+
+  ntrex:
+    main_dir: ./data/ntrex/NTREX-128
+    subset_file: ntrex_128_subset.feather
+    languages:
+      - afr
+      - arb
+      - ben
+      - cat
+      - ces
+      - cmn
+      - dan
+      - deu
+      - eng
+      - eus
+      - fra
+      - guj
+      - hin
+      - hrv
+      - hun
+      - hye
+      - ind
+      - ita
+      - jpn
+      - kan
+      - kor
+      - mal
+      - mar
+      - nld
+      - npi
+      - por
+      - ron
+      - rus
+      - slk
+      - spa
+      - swe
+      - swh
+      - tam
+      - tel
+      - tha
+      - ukr
+      - urd
+      - vie
+      - wol
+      - yor
+      - zul
