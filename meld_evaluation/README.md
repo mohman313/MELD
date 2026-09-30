@@ -1,14 +1,14 @@
 # MELD: Hidden-State Extraction and Intrinsic Scoring
 
-This repository contains the representation-extraction and intrinsic-scoring utilities used for multilingual evaluation with **MELD**, **MEXA**, and **Language Ranker (LR)**.
+This folder contains the representation-extraction and intrinsic-scoring utilities used for multilingual evaluation with **MELD**, **MEXA**, and **Language Ranker (LR)**.
 
-The repository provides three command-line utilities:
+It provides three command-line utilities:
 
 1. `extract_hidden_states.py` extracts sentence-level hidden representations from FLORES or NTREX.
 2. `extract_non_parallel_hidden_states.py` extracts the independent GLUE reference representations used in the non-parallel robustness experiment.
 3. `calculate_intrinsic_scores.py` loads the saved tensors and computes a layer-wise intrinsic score for every configured language relative to the configured reference language.
 
-Each script processes **one model per invocation** and uses **one GPU**. Experiment-independent settings are stored in `config.yaml`; run-specific choices are supplied from the command line.
+Each script processes one model per invocation and uses one GPU. Experiment-independent settings are stored in `config.yaml`; run-specific choices are supplied from the command line.
 
 
 A CUDA-enabled PyTorch installation is required. The language model itself must fit on the configured GPU during hidden-state extraction.
