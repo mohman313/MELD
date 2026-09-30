@@ -7,9 +7,9 @@ JSON results into two general observation tables:
 - parallel_correlations.{csv,feather}
 - non_parallel_correlations.{csv,feather}
 
-No paper-table-specific aggregation is performed. Each output row contains the
-correlation for one corpus, intrinsic method, downstream benchmark, and model.
-The non-parallel output additionally contains the independent-reference subgroup.
+Each output row contains the correlation for one corpus, 
+intrinsic method, downstream benchmark, and model. The non-parallel output
+additionally contains the independent-reference subgroup.
 """
 
 import argparse
