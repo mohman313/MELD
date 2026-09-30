@@ -25,6 +25,7 @@ paths:
   cache_dir: null
   hidden_states_dir: ./outputs/hidden_states
   scores_dir: ./outputs/scores
+...
 ```
 
 `runtime.gpu_id` is the physical GPU exposed to the process. Because only one device is made visible, it is addressed internally as `cuda:0`.
