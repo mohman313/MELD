@@ -237,7 +237,7 @@ The baseline tensor must contain at least as many samples as the multilingual re
 
 ## 3. Analyze intrinsic/downstream correlations
 
-`analyze_correlations.py` produces **general observation tables**, rather than paper-table-specific summaries.
+`analyze_correlations.py` produces general observation tables.
 
 Run both experiment settings:
 
@@ -311,11 +311,9 @@ Each row therefore corresponds to:
 subgroup × corpus × method × benchmark × model
 ```
 
-No macro averaging, corpus averaging, subgroup mean/std calculation, ranking, or table formatting is performed by `analyze_correlations.py`.
-
 ### Example downstream aggregation
 
-Users can aggregate the observation tables according to their own analysis needs.
+One can aggregate the observation tables according to their own analysis needs.
 
 For example, macro-averaging the parallel correlations across models:
 
@@ -360,8 +358,6 @@ summary = (
     .agg(["mean", "std"])
 )
 ```
-
-These operations reproduce the type of aggregation used for the paper tables while keeping the repository output general and reusable.
 
 Use `--allow-missing` to skip unavailable score/result files with warnings rather than stopping the analysis:
 
