@@ -15,7 +15,7 @@ A CUDA-enabled PyTorch installation is required. The language model itself must 
 
 ## Configuration
 
-Before running the pipeline, review `config.yaml`. By default, it loads the corpora from the `data/` folder. Update the dataset paths and output directory if needed.
+Before running the pipeline, review `config.yaml`. The corpora are stored in the `data/` folder by default, and generated files are saved under `outputs/`. Update these paths if needed.
 
 ```yaml
 runtime:
@@ -25,12 +25,11 @@ paths:
   cache_dir: null
   hidden_states_dir: ./outputs/hidden_states
   scores_dir: ./outputs/scores
-...
 ```
 
-`runtime.gpu_id` is the physical GPU exposed to the process. Because only one device is made visible, it is addressed internally as `cuda:0`.
+Set `runtime.gpu_id` to the physical GPU you want to use.
 
-The `corpora` section defines the Feather input file and language order for each corpus. Language order is important because the same order is used to index the saved hidden-state tensor during scoring.
+The `corpora` section specifies each corpus’s Feather file and language order. Keep this order consistent between extraction and scoring, since it determines the language indices in the saved hidden-state tensor.
 
 ## Input corpora
 
