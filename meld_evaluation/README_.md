@@ -2,16 +2,16 @@
 
 This folder contains the representation-extraction and intrinsic-scoring utilities used for multilingual evaluation with **MELD**, **MEXA**, and **Language Ranker (LR)**.
 
-It provides four command-line utilities:
+It provides three command-line utilities:
 
 1. `extract_hidden_states.py` extracts sentence-level hidden representations from FLORES or NTREX.
 2. `extract_non_parallel_hidden_states.py` extracts the independent GLUE reference representations used in the non-parallel robustness experiment.
 3. `calculate_intrinsic_scores.py` loads the saved tensors and computes a layer-wise intrinsic score for every configured language relative to the configured reference language.
-4. `analyze_correlations.py` combines intrinsic scores with downstream benchmark results and produces general model-level correlation data for parallel and non-parallel experiments.
 
-Each extraction/scoring script processes one model per invocation and uses one GPU. Experiment-independent settings are stored in `config.yaml`; run-specific choices are supplied from the command line.
+Each script processes one model per invocation and uses one GPU. Experiment-independent settings are stored in `config.yaml`; run-specific choices are supplied from the command line.
 
-A CUDA-enabled PyTorch installation is required for hidden-state extraction and intrinsic scoring. The analysis script itself does not perform model inference.
+
+A CUDA-enabled PyTorch installation is required. The language model itself must fit on the configured GPU during hidden-state extraction.
 
 ## Configuration
 
@@ -28,7 +28,8 @@ paths:
 ```
 
 Set `runtime.gpu_id` to the physical GPU you want to use.
-The `corpora` section specifies each corpus's Feather file and language order. Keep this order consistent between extraction and scoring, since it determines the language indices in the saved hidden-state tensor.
+
+The `corpora` section specifies each corpus’s Feather file and language order. Keep this order consistent between extraction and scoring, since it determines the language indices in the saved hidden-state tensor.
 
 ## Input corpora
 
@@ -235,142 +236,6 @@ Then run `calculate_intrinsic_scores.py` normally for FLORES or NTREX. The score
 
 The baseline tensor must contain at least as many samples as the multilingual representation tensor and must have compatible layer and hidden dimensions.
 
-## 3. Analyze intrinsic/downstream correlations
-
-`analyze_correlations.py` produces **general observation tables**, rather than paper-table-specific summaries.
-
-Run both experiment settings:
-
-```bash
-python analyze_correlations.py --setting all
-```
-
-or run them separately:
-
-```bash
-python analyze_correlations.py --setting parallel
-python analyze_correlations.py --setting non-parallel
-```
-
-The analysis configuration is stored under `analysis:` in `config.yaml`. It specifies the model list, corpora, intrinsic methods, downstream benchmarks, non-parallel subgroups, layer aggregation settings, benchmark-result directory, and analysis output directory.
-
-The script recursively searches `analysis.benchmark_results_dir` for `lm-evaluation-harness` JSON result files and aligns benchmark language scores with the intrinsic language scores.
-
-### Parallel output
-
-The parallel experiment produces:
-
-```text
-outputs/analysis/
-├── parallel_correlations.csv
-└── parallel_correlations.feather
-```
-
-Each row corresponds to one:
-
-```text
-corpus × method × benchmark × model
-```
-
-with columns including:
-
-```text
-corpus
-method
-pooling
-scoring
-benchmark
-model
-reference_language
-n_languages
-pearson
-spearman
-intrinsic_file
-benchmark_file
-```
-
-### Non-parallel output
-
-The non-parallel experiment produces:
-
-```text
-outputs/analysis/
-├── non_parallel_correlations.csv
-└── non_parallel_correlations.feather
-```
-
-It has the same structure, plus:
-
-```text
-subgroup
-```
-
-Each row therefore corresponds to:
-
-```text
-subgroup × corpus × method × benchmark × model
-```
-
-No macro averaging, corpus averaging, subgroup mean/std calculation, ranking, or table formatting is performed by `analyze_correlations.py`.
-
-### Example downstream aggregation
-
-Users can aggregate the observation tables according to their own analysis needs.
-
-For example, macro-averaging the parallel correlations across models:
-
-```python
-import pandas as pd
-
-df = pd.read_feather(
-    "outputs/analysis/parallel_correlations.feather"
-)
-
-macro = (
-    df.groupby(["corpus", "method", "benchmark"])[
-        ["pearson", "spearman"]
-    ]
-    .mean()
-)
-```
-
-For the non-parallel setting, first obtain one macro correlation per subgroup:
-
-```python
-df = pd.read_feather(
-    "outputs/analysis/non_parallel_correlations.feather"
-)
-
-subgroup_macro = (
-    df.groupby(
-        ["subgroup", "corpus", "method", "benchmark"]
-    )[["pearson", "spearman"]]
-    .mean()
-)
-```
-
-and, if desired, summarize those subgroup-level values:
-
-```python
-summary = (
-    subgroup_macro.reset_index()
-    .groupby(["corpus", "method", "benchmark"])[
-        ["pearson", "spearman"]
-    ]
-    .agg(["mean", "std"])
-)
-```
-
-These operations reproduce the type of aggregation used for the paper tables while keeping the repository output general and reusable.
-
-Use `--allow-missing` to skip unavailable score/result files with warnings rather than stopping the analysis:
-
-```bash
-python analyze_correlations.py \
-  --setting all \
-  --allow-missing
-```
-
 ## Large hidden-state tensors
 
 By default, hidden-state tensors are loaded directly onto the selected GPU for scoring. Models listed under:
@@ -398,11 +263,11 @@ If the tokenizer does not define a padding token, the EOS token is used as the p
 
 ## Reproducibility
 
-The extraction seed, tokenizer settings, corpus language order, scoring parameters, reference language, PCA settings, analysis settings, and GPU configuration are recorded in `config.yaml`.
+The extraction seed, tokenizer settings, corpus language order, scoring parameters, reference language, PCA settings, and GPU configuration are all recorded in `config.yaml`.
 
-For reproducible experiments, keep the configuration file used for each run together with the generated hidden-state, score, and analysis files.
+For reproducible experiments, keep the configuration file used for each run together with the generated hidden-state and score files.
 
-A custom configuration file can be supplied with:
+A custom configuration file can be supplied to either script with:
 
 ```bash
 --config /path/to/config.yaml

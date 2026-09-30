@@ -1,13 +1,11 @@
-# Shared configuration for hidden-state extraction, intrinsic scoring,
-# and correlation analysis.
-#
-# Per-run extraction/scoring choices are passed on the command line:
+# Shared configuration for hidden-state extraction and intrinsic scoring.
+# Per-run choices are passed on the command line:
 #   --model, --method, --corpus
 
 seed: 313
 
 runtime:
-  # Physical GPU exposed to each extraction/scoring script.
+  # Physical GPU exposed to each script. Both scripts use one GPU only.
   gpu_id: 0
 
   # Large hidden-state tensors listed here are loaded into CPU memory first;
@@ -45,6 +43,7 @@ tokenizer:
   truncation: true
   return_tensors: pt
 
+
 # Non-parallel reference corpus used for the robustness experiment.
 # The input Feather file must contain a text column and a subgroup column.
 non_parallel_corpus:
@@ -80,69 +79,6 @@ scoring:
     mode: none
     explained_variance: 0.9
     n_components: 256
-
-# General analysis configuration.
-#
-# analyze_correlations.py produces model-level observations only. It does not
-# macro-average models, average corpora, compute subgroup mean/std, or format
-# paper tables.
-analysis:
-  # Directory containing lm-evaluation-harness JSON result files.
-  # The analysis script searches this directory recursively.
-  benchmark_results_dir: ../benchmark_evaluation/lm-evaluation-harness/eval_results
-
-  output_dir: ./outputs/analysis
-
-  methods:
-    - meld
-    - mexa
-    - lr
-
-  corpora:
-    - flores
-    - ntrex
-
-  benchmarks:
-    - m_mmlu
-    - arc_multilingual
-    - hellaswag_multilingual
-    - mmmlu
-    - belebele
-
-  models:
-    - Qwen3.5-27B
-    - gemma-4-31B
-    - Qwen3.5-9B
-    - gemma-4-12B
-    - Llama-3.1-70B
-    - Llama-3.1-8B
-    - gemma-3-27b-pt
-    - gemma-3-12b-pt
-    - Qwen3.5-4B
-    - Ministral-3-8B-Instruct-2512-BF16
-    - Ministral-3-3B-Instruct-2512-BF16
-    - Phi-4-reasoning
-    - Phi-4-mini-reasoning
-    - Phi-4-mini-instruct
-
-  # The layer-wise score tables include the embedding/input state at row 0.
-  # We remove that row before layer aggregation.
-  drop_first_layer: true
-
-  # MELD: normalized AUC over the centered 10% layer window.
-  meld_middle_fraction: 0.10
-  meld_min_layers: 2
-
-  # Language Ranker: every fifth layer, starting from layer index 5.
-  lr_layer_step: 5
-
-  # Independent reference subsets used by the non-parallel experiment.
-  non_parallel_subgroups:
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
 
 corpora:
   flores:
