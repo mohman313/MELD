@@ -262,7 +262,7 @@ def inter_intra_ratio_maha(
         inter = inter / d
         intra = intra / d
 
-    ratio = inter / (intra + inter + eps)
+    ratio = inter / (intra + inter + eps) # MELD neutrality score is: (1 - ratio)
     return ratio
 
 
