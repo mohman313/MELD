@@ -1,6 +1,6 @@
 # MELD benchmark evaluation
 
-This folder includes `run_benchmark.sh`, the downstream benchmark runner used with the MELD experiments. It evaluates **one model on one lm-evaluation-harness task per invocation**. The model argument can be a Hugging Face repository ID or a local model directory.
+This folder includes `run_benchmark.sh`, the downstream benchmark runner used with the MELD experiments. It evaluates one model on one lm-evaluation-harness task per invocation. The model argument can be a Hugging Face repository ID or a local model directory.
 
 ## Requirements
 
@@ -43,9 +43,6 @@ Examples:
 ```bash
 # A Hugging Face model ID
 bash run_benchmark.sh belebele Qwen/Qwen3.5-4B 0
-
-# A local model directory
-bash run_benchmark.sh m_mmlu Qwen/Qwen3.5-4B 0
 
 # An instruction-tuned model
 bash run_benchmark.sh belebele mistralai/Ministral-3-8B-Instruct-2512-BF16 5
