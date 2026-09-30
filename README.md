@@ -10,21 +10,26 @@ This repository contains the code used for both intrinsic multilingual evaluatio
 
 ```text
 MELD/
-+-- README.md
-+-- meld_evaluation/
-¦   +-- README.md
-¦   +-- config.yaml
-¦   +-- extract_hidden_states.py
-¦   +-- extract_non_parallel_hidden_states.py
-¦   +-- calculate_intrinsic_scores.py
-¦   +-- data/
-¦       +-- flores/
-¦       +-- ntrex/
-¦       +-- glue/
-+-- benchmark_evaluation/
-    +-- README.md
-    +-- run_benchmark.sh
-    +-- lm-evaluation-harness/
+├── README.md
+├── meld_evaluation/
+│   ├── README.md
+│   ├── config.yaml
+│   ├── extract_hidden_states.py
+│   ├── extract_non_parallel_hidden_states.py
+│   ├── calculate_intrinsic_scores.py
+│   ├── analyze_correlations.py
+│   └── data/
+│       ├── flores/
+│       │   └── flores_plus_devtest_subset.feather
+│       ├── ntrex/
+│       │   └── NTREX-128/
+│       │       └── ntrex_128_subset.feather
+│       └── glue/
+│           └── glue_sst2_qqp_mrpc_qnli_mnli_test_rsample.feather
+└── benchmark_evaluation/
+    ├── README.md
+    ├── run_benchmark.sh
+    └── lm-evaluation-harness/
 ```
 
 The two main components are:
