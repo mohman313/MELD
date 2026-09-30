@@ -1,12 +1,12 @@
 # MELD Benchmark Evaluation
 
-This folder includes `run_benchmark.sh`, the downstream benchmark runner used with the MELD experiments. It evaluates one model on one lm-evaluation-harness task per invocation. The model argument can be a Hugging Face repository ID or a local model directory.
+This folder includes `run_benchmark.sh`, the downstream benchmark runner used with the MELD experiments. It evaluates one model on one lm-evaluation-harness task per invocation. 
 
 ## Requirements
 
 - Bash, Python, PyTorch, and a CUDA-capable environment suitable for the chosen model.
-- [EleutherAI lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) and [Hugging Face Accelerate](https://github.com/huggingface/accelerate), installed in the active environment so `accelerate launch -m lm_eval` works.
-- The requested benchmark task must be available in that harness installation. The `hf-mistral3` backend used for Ministral-3 must also be registered there; this may require the same harness version or local extension used in the experiments.
+- [EleutherAI lm-evaluation-harness](https://github.com/EleutherAI/lm-evaluation-harness) and [Hugging Face Accelerate](https://github.com/huggingface/accelerate), installed in the active environment.
+- The requested benchmark task must be available in the harness installation.
 - Access to the selected Hugging Face model, including authentication or license acceptance where required, or a downloaded local model directory.
 
 The script currently writes results to `./lm-evaluation-harness/eval_results`. You could edit those lines in `run_benchmark.sh` for your machine before running it. It uses `dtype=bfloat16`, and automatic batch sizing; ensure your hardware supports the selected model and precision.
@@ -48,7 +48,7 @@ bash run_benchmark.sh belebele Qwen/Qwen3.5-4B 0
 bash run_benchmark.sh belebele mistralai/Ministral-3-8B-Instruct-2512-BF16 5
 ```
 
-The experiments described in the paper used **zero-shot for pretrained models** and **five-shot for instruction-tuned and reasoning models**. Pass the corresponding value explicitly for each run. The paper evaluates m-MMLU, m-ARC, and m-HellaSwag from Okapi, OpenAI MMMLU, and BELEBELE; task identifiers in the original runner include `m_mmlu`, `arc_multilingual`, `hellaswag_multilingual`, `mmmlu`, and `belebele`. Confirm the names with your installed harness before a long run.
+The experiments described in the paper used **zero-shot** for pretrained models and **five-shot** for instruction-tuned and reasoning models. Pass the corresponding value explicitly for each run. The paper evaluates m-MMLU, m-ARC, and m-HellaSwag from Okapi, OpenAI MMMLU, and BELEBELE; task identifiers in the original runner include `m_mmlu`, `arc_multilingual`, `hellaswag_multilingual`, `mmmlu`, and `belebele`. Confirm the names with your installed harness before a long run.
 
 ## Models in the paper
 
@@ -70,7 +70,3 @@ The paper evaluates 14 models across six families.
 | Phi-4 | `microsoft/Phi-4-reasoning` | 15B | Reasoning | 5 |
 | Phi-4-mini | `microsoft/Phi-4-mini-reasoning` | 4B | Reasoning | 5 |
 | Phi-4-mini | `microsoft/Phi-4-mini-instruct` | 4B | Instruct | 5 |
-
-
-
-
