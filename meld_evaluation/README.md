@@ -129,7 +129,7 @@ The output filename follows the experiment naming convention:
 For the default MELD configuration, an example is:
 
 ```text
-Qwen3.5-27B_maha_diagonal_mean_pool_i_score_ntrex_spa.feather
+Qwen3.5-27B_maha_diagonal_mean_pool_i_score_ntrex_eng.feather
 ```
 
 ## Scoring configuration
