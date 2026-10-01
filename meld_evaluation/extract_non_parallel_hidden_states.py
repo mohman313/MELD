@@ -117,7 +117,6 @@ def main():
     data_df = pd.read_feather(data_path)
     data_df = data_df[data_df[group_column] == subgroup].copy().reset_index(drop=True)
 
-    # Preserve the original sampling order used for the baseline corpus.
     texts = data_df.sample(frac=1.0, random_state=seed)[text_column].values
 
     # ------------------------------------------------------------
@@ -222,7 +221,7 @@ def main():
     gc.collect()
     torch.cuda.empty_cache()
 
-    # Preserve the baseline tensor construction expected by the scorer.
+    # The baseline tensor construction expected by the scorer.
     lang_lyr_hs = torch.stack(lang_lyr_mean, dim=0).float().squeeze()
 
     print(f"Final shape: {lang_lyr_hs.shape}")

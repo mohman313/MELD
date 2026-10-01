@@ -312,7 +312,7 @@ def infer_model_name(path, data, configured_models):
     """Infer the configured model identifier represented by an evaluation JSON."""
     stem = path.stem
 
-    # Preserve compatibility with the earlier explicit output convention:
+    # Preserve compatibility:
     # <model>__<task>_...json
     prefix = stem.split("__", 1)[0]
     if prefix in configured_models:

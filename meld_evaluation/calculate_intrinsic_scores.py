@@ -381,8 +381,8 @@ def main():
             "Run extract_hidden_states.py with the same model, method, and corpus first."
         )
 
-    # Preserve the original memory strategy: selected very large hidden-state
-    # tensors can remain on CPU while each language/layer slice is moved to GPU.
+    # Selected very large hidden-state tensors can remain on CPU 
+    # while each language/layer slice is moved to GPU.
     cpu_models = set(config["runtime"].get("load_hidden_states_on_cpu_models", []))
     load_location = "cpu" if model_name in cpu_models else device
 
